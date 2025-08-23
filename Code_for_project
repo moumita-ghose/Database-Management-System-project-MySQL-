@@ -1,0 +1,164 @@
+create database port_msd;
+
+create table authorities
+(
+    id int primary key not null auto_increment,
+    name varchar(250),
+    email varchar(250),
+    phone varchar(250)
+);
+
+insert into authorities values
+(null,'Robert','rob@gmail.com'),
+(null,'Gray','gra@gmail.com'),
+(null,'David','dav@gmail.com'),
+(null,'Alice','ali@gmail.com'),
+(null,'Polycarp','pol@gmail.com'),
+(null,'Johan','joh@gmail.com'),
+(null,'Joshep','rob@gmail.com'),
+(null,'Robert','rob@gmail.com'),
+(null,'Bob','bob@gmail.com'),
+(null,'William','wil@gmail.com'),
+(null,'Lisa','lis@gmail.com'),
+(null,'Jennie','jennie@gmail.com'),
+(null,'Rose','ros@gmail.com');
+
+
+create table berths(
+    id int not null primary key auto_increment,
+    berth_name varchar(250),
+    maximum_length int, 
+    current_status Enum('Available','Not Available','Occupied','Not Useable')
+);
+
+insert into berths values
+(null, 'North Pier',300,'Available'),
+(null, 'East Dock',2090,'Available'),
+(null, 'West Dock',89010,'Occupied'),
+(null, 'Nothern Pole',7000,'Occupied'),
+(null, 'Fishing Pole',300,'Available'),
+(null, 'Caro Terminal',300,'Available'),
+(null, 'Sea portation',300,'Occupied'),
+(null, 'North Pier',8000,'Available'),
+(null, 'POrt222',300,'Available'),
+(null, 'port12',400,'Occupiede'),
+(null, 'Luxuary Marine',2090,'Available');
+
+create table port_details(
+    id int not null primary key auto_increment,
+    name varchar (250),
+    location varchar (250),
+    authority_id int ,
+    foreign key(authority_id) references authorities(id) 
+);
+
+insert into port_details  values
+(null,'Chittagong Port', 'Bangladesh',1),
+(null,'Singapore Port','Singapore',2),
+(null,'Port of Sanghai','China',1),
+(null,'Jabel Ali Port','Dubai',5),
+(null,'Mongla Port','Bangladesh',4),
+(null,'Port of Antwerp','Belgium',3),
+(null,'Port of Rotterdaim','Netherlands',2),
+(null,'Port of Angeles','USA',1),
+(NULL,'Port of Busan','South Korea',6),
+(NULL,'Port of Hamburg','Germany',6);
+
+create table employees(
+    id int not null primary key auto_increment,
+    name varchar(250),
+    id int not null primary key auto_increment,
+    role Enum('HR','Technical Team','Cargo handler','security officer','Dock supervisor')    
+    );
+
+
+insert into employees values
+(Null,'John','HR'),
+(null,'Hope','technical team'),
+(null,'Jimin','Cargo handeler'),
+(null,'Teahung','Dock supervisor'),
+(null,'Jin','Security Officer'),
+(null,'Gray''Berth coordinator'),
+(null,'Anthony''Cargo handeler'),
+(null,'Mathew','Berth coordinator'),
+(null,'Hamlet','Security Officer');
+
+create table departments(
+    id int not null primary key auto_increment,
+    name varchar(250),
+    head_id int,
+    foreign key(head_id) references employees(id)
+);
+
+insert into departments values
+(null,'Finance',6),
+(null,'Security',3),
+(null,'Maintainance',4),
+(null,'Marine services'2)
+(null,'IT & System',1),
+(null,'Human Resource',4),
+(null,'Health and safety',2);
+
+create table owners
+(
+    id int not null primary key auto_increment,
+    first_name varchar(250),
+    middle_name varchar(250),
+    last_name varchar(250),
+    present_country varchar(250),
+    present_address varchar(250),
+    permanante_address varchar(250),
+    email varchar(250),
+    contact varchar(25),
+);
+
+insert into owners values 
+(null,'araya','Ariyana','Cristopher','Albania','25A-blockD,yehmin','Road2a-942,Andorra','araya@gmail.com','+99876551345'),
+(null,'James','Gomes','Carol','Cambodia','Gomes86-135 Brompton','Carol99Road90-942,Cambodia','gome23s@gmail.com','93876551345'),
+(null,'Michael','piliya','Homeis','Denmarkpiliya-ckD',' Demnark 234-dgh3',' Denmark','mph9omes@gmail.com','93876152445'),
+(null,'John','Gray','Eric','Gabon','Schlosshoferstrasse', 20,1210'eric34@gmail.com','244876551345'),
+(null,'Robert','Jonathan','Stephen','Taiwan','25A-blockD','yehmin Road2a-942','Andorra','david903@gmail.com','67276551345');
+
+create table vesseles (
+    id int not null primary key auto_increment,
+    name varchar(250),
+    type enum('Containers','Oil tanker','Chemical tanker','LPG container',
+                'pilot boat','General cargo ship'
+             ),
+     capacity varchar(250),
+     flag_state varchar(250),
+     owner_id int,
+     foreign key( owner_id ) references owners(id)      
+);
+
+insert into vesseles values
+(null,' MSC virr','chemical tanker','110000 DWT','India',17),
+(null,'Artic Atlantica','Pilot Boat','6334 Pax','Singapore',12),
+(null,'AkC Dream','LPG Carrier','120000 TEU','Panama',7),
+(null,'Maersk Alabama','Containers','1700 TEU','Panama',22),
+(null,'Symphony Apirit','Oil tanker','17980 TEU','USA',19);
+
+create table crew (
+    id int not null primary key auto_increment,
+    first_name varchar(250),
+    last_name varchar(250),
+    ranks enum('captain','Cheif officer','Second officer','Deck cadet',
+                'Able Seaman','Ordinary seaman','Deck Cadet'),
+    nationality varchar(250),
+    date_of_Birth date,
+    vessel_id int ,
+    contact varchar(25),
+    salary decimal(10,2),
+    email varchar(250),
+    foreign key(vessel_id) REFERENCES vessels(id)
+);
+
+
+insert into vessels values
+(null,'Lisa','Maria','Captain','Italiyan','1989-02-20',1,'1-2345671',165000.25,'lisa_maris32@gmail.com'),
+(null,'Emily','Betty','Able Seaman','Korean','1982-08-31',4,'23-23090571',85000.25,'emkett@gmail.com')
+(null,'Steven','Donna','Ordinary Seaman','Egyptian','1992-03-28',2,'98-2309371',87000.25,'stdonna3@gmail.com'),
+(null,'Jacob','Nicholas',
+'Ordinary Seaman',
+'Egyptian',
+'1982-03-28',3,'98-23209371',89000.25 ,'niclcc40@gmail.com');
