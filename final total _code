@@ -407,3 +407,11 @@ insert into vessels values
 (null, 'AkC Dream', 'LPG Carrier', '120000 TEU', 'Panama', 7),
 (null, 'Discovery Infinity', 'Containers', '67232 Pax', 'Norway', 22),
 (null, 'Liberty Sun', 'General Cargo ship', '3451222 TEU', 'UK', 2);
+
+alter table employees 
+add salary decimal(8,2);
+
+alter table employees 
+add contact varchar(250);
+alter table employees
+add date_of_birth date;
