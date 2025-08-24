@@ -1,0 +1,409 @@
+create database port_msd;
+
+
+create table authorities (
+  id int primary key NOT NULL AUTO_INCREMENT,
+  name varchar(250) ,
+  email varchar(250),
+  phone varchar(20) ,
+) ;
+
+insert into authorities values 
+(null , 'Robert', 'rob@gmail.com', '23-456901'),
+(null , 'GRay', 'gra@gmail.com', '23-09123401'),
+(null , 'David', 'dav@gmail.com', '23-040256901'),
+(null , 'ALice', 'ali@gmail.com', '23-302456901'),
+(null , 'Polycarp', 'pol@gmail.com', '23-01243501'),
+(null , 'Johan', 'joh@gmail.com', '23-222333901'),
+(null , 'Joshep', 'jos@gmail.com', '23-444555009'),
+(null , 'Bob', 'bob@gmail.com', '23-48766092'),
+(null , 'William', 'wil@gmail.com', '23-9093456'),
+(null ,  'Lisa', 'lis@gmail.com', '23-0932129000'),
+(null ,  'Jennie', 'jen@gmail.com', '23-091800901'),
+(null ,  'Rose', 'ros@gmail.com', '23-0019293940');
+
+
+create table berths (
+  id int primary key NOT NULL AUTO_INCREMENT,
+  berth_name varchar(250) ,
+  maximum_lengths int ,
+  current_status enum('Available','Occupied','Not Useable') DEFAULT 'Available',
+);
+
+
+insert into berths values 
+(null ,'North Pier', 300, 'Available'),
+(null ,'East Dock', 7000, 'Occupied'),
+(null ,'West Dock', 80430, 'Not Useable'),
+(null ,'Nothern Pole', 8760, 'Available'),
+(null ,'Fishing Pole', 89010, 'Available'),
+(null ,'Caro Terminal', 37600, 'Occupied'),
+(null ,'Luxuary Marine', 2090, 'Occupied'),
+(null ,'port12', 30230, 'Available'),
+(null ,'POrt222', 8000, 'Available'),
+(null , 'Sea portation', 700, 'Not Useable'),
+(null , 'Harbor Resting350 ', 700, 'Not Useable'),
+(null , 'Harbor Resting650', 700, 'Not Useable');
+
+
+create table berth_usage (
+  id int primary key NOT NULL AUTO_INCREMENT,
+  berth_id int,
+  ship_id int,
+  start_time datetime,
+  end_time datetime ,  
+  charge_per_hour decimal(6,2) DEFAULT NULL,
+  total_fee decimal(12,2) GENERATED ALWAYS AS ((timestampdiff(HOUR,`start_time`,`end_time`) * `charge_per_hour`)) STORED,
+  payment_status enum('Pending','Done') DEFAULT NULL,
+ foreign key (berth_id) references berths (id),
+  foreign KEY (ship_id) references vessels(id)
+);
+
+
+insert into berth_usage
+values
+(null, 6, 1, '2025-08-20 08:00:00', '2025-08-20 14:00:00', 500.00, 'Pending'),
+(null, 7, 2, '2025-07-21 06:40:00', '2025-07-21 14:00:00', 500.00, 'Pending'),
+(null, 12, 8, '2025-05-22 11:50:00', '2025-05-23 14:00:00', 500.00, 'Pending'),
+(null, 10, 3, '2025-02-22 09:00:00', '2025-02-23 14:00:00', 400.00, 'Pending'),
+(null, 1, 6, '2025-07-25 06:00:00', '2025-07-27 14:00:00', 300.00, 'Done'),
+(null, 3, 2, '2025-08-01 07:00:00', '2025-08-02 14:00:00', 500.00, 'Done'),
+(null, 8, 8, '2025-06-02 08:50:00', '2025-06-02 14:00:00', 500.00, 'Pending'),
+(null, 1, 1, '2025-05-07 11:20:00', '2025-05-08 14:00:00', 500.00, 'Pending'),
+(null, 4, 4, '2025-04-10 14:00:00', '2025-04-13 14:00:00', 500.00, 'Done'),
+(null,  1, 5, '2025-08-17 17:00:00', '2025-08-20 14:00:00', 500.00, 'Pending'),
+(null,  8, 8, '2025-08-17 17:00:00', '2025-08-20 14:00:00', 500.00, 'Done'),
+(null,  6, 7, '2025-08-17 17:00:00', '2025-08-20 14:00:00', 500.00, 'Pending'),
+(null,  1, 2, '2025-08-17 17:00:00', '2025-08-20 14:00:00', 500.00, 'Pending'),
+(null,  3, 6, '2025-08-17 17:00:00', '2025-08-20 14:00:00', 500.00, 'Done'),
+(null,  2, 5, '2025-08-17 17:00:00', '2025-08-20 14:00:00', 500.00, 'Pending');
+
+
+create table cargoes (
+  id  int primary key auto_increment,
+  types_of_cargo enum('Dry Cargo','Liquid Cargo','Refrigerated cargo','Hazardous Cargo','Specialized Cargo') DEFAULT NULL,
+  hazardous_flag enum('Yes','No') DEFAULT NULL,
+  weights_in_tonn decimal(7,2) DEFAULT NULL,
+  volumes decimal(7,2) DEFAULT NULL,
+);
+
+
+insert into cargoes values 
+( null,'Dry Cargo', 'No', 3000.36, 3500.98),
+(null, 'Hazardous Cargo', 'Yes', 389.36, 9500.12),
+(null, 'Specialized Cargo', 'Yes', 1250.36, 8765.00),
+(null, 'Specialized Cargo', 'Yes', 39800.36, 8751.12),
+(null, 'Dry Cargo', 'No', 1200.36, 3456.34),
+(null, 'Specialized Cargo', 'No', 450.90, 32.80),
+(null, 'Specialized Cargo', 'No', 4567.36, 1092.30),
+(null, 'Specialized Cargo', 'No', 8992.30, 2213.98),
+(null, 'Dry Cargo', 'No', 2109.90, 921.98),
+(null,  'Hazardous Cargo', 'Yes', 980.06, 8910.98),
+(null,  'Hazardous Cargo', 'Yes', 9010.32, 9032.98),
+(null,  'Hazardous Cargo', 'Yes', 321.36, 345.98),
+(null,  'Dry Cargo', 'No', 321.36, 9876.98),
+(null,  'Dry Cargo', 'No', 980.36, 789.98);
+null, 
+create table containers (
+  id int primary key auto_increment,
+  types enum('Dry Van','Reefer','Tank','Open top','Flat Rack'),
+  cargo_id int ,
+  owner_contact varchar(25) ,
+ foreign key(cargo_id)references cargoes(id)
+);
+
+
+
+insert int containers values 
+(null, 'Dry Van', 1, NULL),
+(null, 'Reefer', 14, NULL),
+(null, 'Open top', 1, NULL),
+(null, 'Tank', 2, NULL),
+(null, 'Tank', 13, NULL),
+(null, 'Dry Van', 2, NULL),
+(null, 'Reefer', 4, NULL),
+(null, 'Dry Van', 7, NULL),
+(null, 'Dry Van', 6, NULL),
+(null,  'Tank', 2, NULL),
+(null,  'Dry Van', 7, NULL),
+(null,  'Reefer', 13, NULL),
+(null,  'Dry Van', 1, NULL),
+(null,  'Open top', 14, NULL),
+(null,  'Open top', 2, NULL),
+(null,  'Dry Van', 7, NULL),
+(null,  'Dry Van', 5, NULL),
+(null,  NULL, NULL, '23-1098475898'),
+(null,  NULL, NULL, '23-1098470099'),
+(null,  NULL, NULL, '23-3091780589'),
+(null,  NULL, NULL, '1-100980109978'),
+(null,  NULL, NULL, '448-765855900'),
+(null,  NULL, NULL, '448-981024587'),
+(null,  NULL, NULL, '448-981024589'),
+(null,  NULL, NULL, '448-981024589'),
+(null,  NULL, NULL, '448-981024589'),
+(null,  NULL, NULL, '448-981024589'),
+(null,  NULL, NULL, '448-98109054'),
+(null,  NULL, NULL, '448-981024589'),
+(null,  NULL, NULL, '448-981024589'),
+(null,  NULL, NULL, '448-981024589');
+
+create table crew (
+  id primary key int auto_increment,
+  first_name varchar(200) ,
+  last_name varchar(250) ,
+  ranks enum('Captain','Chief Officer','Second Officer','Third Officer','Deck Cadet','Able Seaman','Ordinary Seaman','Engine Cadet') NOT NULL,
+  nationality varchar(250) ,
+  date_of_birth date ,
+  vessel_id int ,
+  contact varchar(20),
+  salary decimal(9,2),
+  email varchar(250) ,
+ foreign key  (vessel_id) references vessels (id)
+);
+
+insert into crew 
+values
+(null , 'Lisa', 'Maria', 'Captain', 'Italiyan', '1989-02-20', 1, '1-2345671', 165000.25, 'lisa_maris32@gmail.com'),
+(null , 'Emily', 'Betty', 'Able Seaman', 'Korean', '1982-08-31', 4, '23-23090571', 85000.25, 'emkett@gmail.com'),
+(null , 'Steven', 'Donna', 'Ordinary Seaman', 'Egyptian', '1992-03-28', 2, '98-2309371', 87000.25, 'stdonna3@gmail.com'),
+(null , 'Jacob', 'Nicholas', 'Ordinary Seaman', 'Egyptian', '1982-03-28', 3, '98-23209371', 89000.25, 'niclcc40@gmail.com'),
+(null , 'Rayan', 'Amy', 'Second Officer', 'Canadian', '1994-02-28', 4, '98-02034210', 76000.25, 'aamy02@gmail.com'),
+(null , 'Justin', 'Pamela', 'Engine Cadet', 'Brazillian', '1994-04-08', 8, '98-068034298', 76000.25, 'pamela@gmail.com'),
+(null , 'Jessika', 'Joyee', 'Engine Cadet', 'Chinese', '1984-01-23', 7, '98-0680312098', 76000.25, 'jessicajj@gmail.com'),
+(null , 'Olivia', 'Anna', 'Engine Cadet', 'colombian', '1994-04-19', 8, '98-0678998', 96000.25, 'piuuu@gmail.com');
+
+
+
+create table delivery_orders (
+  id int not null auto_increment,
+  cargo_id int ,
+  pickup_location varchar(250) ,
+  dellivery_location varchar(250) ,
+  status enum('Order placed','Pending') ,
+ foreign key (cargo_id) references cargoes (id)
+);
+
+
+
+insert into delivery_orders values 
+
+(null , 14, 'USA', 'Canada', 'Pending'),
+(null , 7, 'Nigeria', 'Canada', 'Order placed'),
+(null , 1, 'Ukraine', 'Denmark', 'Pending'),
+(null , 2, 'Russia', 'Italy', 'Pending'),
+(null , 12, 'Poland', 'Germany', 'Pending'),
+(null , 14, 'Uruguya', 'Netherland', 'Order placed'),
+(null , 3, 'America', 'Nigeria', 'Order placed'),
+(null , 14, 'Belgium', 'Canada', 'Pending'),
+(null , 1, 'Egypt', 'Brazil', 'Order placed');
+
+create table departments (
+  id  int primary key not null auto_increment,
+  name varchar(250),
+  department_head_id int ,
+  foreign key department_head_id references employees(id)
+); 
+
+
+
+insert into departments
+values
+(null , 'operations', 1),
+(null , 'Finance', 6),
+(null , 'Security', 3),
+(null , 'Maintainance', 4),
+(null , 'Marine services', 2),
+(null , 'IT & System', 1),
+(null , 'Health and safety', 5);
+(null , 'Human Resource', 4),
+
+
+create table employees (
+  id int primary key not null auto_increment,
+  name varchar(250),
+  role enum('HR','technical team','Dock supervisor','Berth coordinator','Cargo handeler','Security Officer','Billing Officer','Account Clerk') DEFAULT NULL,
+);
+
+
+insert into employees values
+(null, 'John', 'HR'),
+(null, 'Hope', 'technical team'),
+(null, 'Jimin', 'Cargo handeler'),
+(null, 'Teahung', 'Dock supervisor'),
+(null, 'Jin', 'Security Officer'),
+(null, 'Gray', 'Berth coordinator'),
+(null, 'Anthony', 'Cargo handeler'),
+(null, 'Mathew', 'Berth coordinator'),
+(null, 'Hamlet', 'Security Officer'),
+(null,  'Mackbeth', 'Security Officer'),
+(null,  'Arther', 'Berth coordinator'),
+(null,  'Lisa', 'Dock supervisor');
+
+
+create table inspections (
+  id  int primary key  not null auto_increment,
+  vessel_id int ,
+  inspection_date datetime ,
+  authority_id int ,
+  result enum('Passed','Failed') ,
+ foreign key  vessel_id (vessel_id),
+ foreign key  authority_id (authority_id)
+);
+
+
+create table invoices (
+  id int  primary key not null auto_increment,
+  container_id int ,
+  amount decimal(10,2) ,
+  due_date datetime ,
+  status enum('Paid','Unpaid'),
+foreign key (container_id) references containers (id)
+);
+
+
+insert into invoices
+ values
+(null , 17, 2300.80, '2025-08-21 12:00:00', 'Paid'),
+(null , 17, 2300.80, '2025-04-21 12:00:00', 'Unpaid'),
+(null , 16, 2300.80, '2025-05-21 12:00:00', 'Paid'),
+(null , 15, 2300.80, '2025-07-21 12:00:00', 'Paid'),
+(null , 13, 2300.80, '2025-12-21 12:00:00', 'Unpaid'),
+(null , 12, 2300.80, '2025-11-21 12:00:00', 'Unpaid'),
+(null , 1, 2300.80, '2025-03-21 12:00:00', 'Paid'),
+(null , 3, 2300.80, '2025-06-21 12:00:00', 'Paid'),
+(null , 2, 2300.80, '2025-07-21 12:00:00', 'Unpaid');
+
+
+create table owners (
+  id int primary key not null auto_increment,
+  first_name varchar(250) ,
+  middle_name varchar(250),
+  last_name varchar(250) ,
+  present_country varchar(250) ,
+  present_address varchar(250) ,
+  permanant_address varchar(250) ,
+  email varchar(250),
+  contact varchar(25) 
+);
+
+insert into owners 
+values
+(null,'araya', 'Ariyana', 'Cristopher', 'Albania', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'araya@gmail.com', '+99876551345'),
+(null,'araya', 'Ariyana', 'Cristopher', 'Albania', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'ara21ya@gmail.com', '376876551345'),
+(null,'James', 'Gomes', 'Carol', 'Cambodia', 'Gomes86-135 Brompton', 'Carol99Road90-942,Cambodia', 'gome23s@gmail.com', '93876551345'),
+(null,'Michael', 'piliya', 'Homeis', 'Denmark', 'piliya-ckD Demnark ', '234-dgh3 Denmark', 'mph9omes@gmail.com', '93876152445'),
+(null,'John', 'Gray', 'Eric', 'Gabon', 'Schlosshoferstrasse 20,1210', 'Schlosshoferstrasse 20,1210 Vienna', 'eric34@gmail.com', '244876551345'),
+(null,'Robert', 'Jonathan', 'Stephen', 'Taiwan', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'david903@gmail.com', '67276551345'),
+(null,'David', 'Larry', 'Scotto', 'Italy', '100 Flushcombe Road,Albury 2148', '100 Flushcombe Road,Albury 2148', 'la8rry98@gmail.com', '61276551345'),
+(null,'William', 'Justin', 'Lipa', 'Jamaica', 'Rue Gregoire Soupart 14,6200,Chatelet', 'Slavyanska 29,1000 SOFIA', 'ri9chard34@gmail.com', '617-6551345'),
+(null,'Richard', 'Benjammin', 'Larry', 'Indonesia', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'lar1ryrichard@gmail.com', '973-8218901345'),
+(null, 'Joshep', 'Samuel', 'Moris', 'Kenya', 'Avenida João Jorge,112,apto. 31,Campinas - SP,13035-680', 'Avenida João Jorge,112,apto. 31,Campinas - SP,13035-680', 'thomas998@gmail.com', '88076551345'),
+(null, 'Thomas', 'Gorge', 'Johan', 'Libya', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'frank_hell34@gmail.com', '32-76551345'),
+(null, 'Cristopher', 'Joshep', 'Frank', 'Brazil', 'Bahnhofstrasse 4a/8,8001 Zurich', 'Bahnhofstrasse 4a/8,8001 Zurich', 'cristopher24@gmail.com', '50176551345'),
+(null, 'Charles', 'Frank', 'Patrick', 'Albania', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'dan3jck45patrick6@gmail.com', '59-183451345'),
+(null, 'Daniel', 'Jack', 'Michael', 'Brazil', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'michaael_jack23@gmail.com', '1-284551345'),
+(null, 'Matthew', 'Raymond', 'Abrik', 'Andorra', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'abrick@gmail.com', '1-1123551345'),
+(null, 'Anthony', 'ALexander', 'Fili', 'Ukraine', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'anthony@gmail.com', '23-8456551345'),
+(null, 'Mark', 'Tyler', 'Aaron', 'Russia', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'stev@gmail.com', '855-5651345'),
+(null, 'Steven', 'Jearr', 'James', 'Uruguya', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'sjj4uruguya@gmail.com', '855-1326551345'),
+(null, 'ANdrew', 'Joes', 'MOri', 'Vietnam', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'ernu3@gmail.com', '1-234551345'),
+(null, 'James', 'Ninn', 'Henrry', 'Zambia', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'jhn34@gmail.com', '591-231551345'),
+(null, 'Paul', 'Nathan', 'Jonath', 'Yemen', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'paul3nathan7@gmail.com', '55-300551345'),
+(null, 'Kenneth', 'Zachary', 'Lisa', 'France', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'kenneth3@gmail.com', '86-09121345'),
+(null, 'Rosen', 'Joes', 'William', 'Denmark', '25A-blockD,yehmin', 'Road2a-942,Andorra', 'rosyy34@gmail.com', '682-876551345');
+
+
+create table ports_details (
+  id primary key int not null auto_increment,
+  name varchar(250) ,
+  location varchar(250) ,
+  authority_id int ,
+foreign keya authority_id references authorities(id)
+);
+
+
+insert into ports_details values
+(null,'Chittagong Port', 'Bangladesh', 1),
+(null,'Singapore Port', 'Singapore', 2),
+(null,'Port of Sanghai', 'China', 1),
+(null,'Jabel Ali Port', 'Dubai', 5),
+(null,'Mongla Port', 'Bangladesh', 4),
+(null,'Port of Antwerp', 'Belgium', 3),
+(null,'Port of Rotterdaim', 'Netherlands', 2),
+(null,'Port of Angeles', 'USA', 1),
+(null,'Port of Busan', 'South Korea', 6),
+(null, 'Port of Hamburg', 'Germany', 6);
+
+
+create table shipments (
+  id primary key int NOT NULL AUTO_INCREMENT,
+  cargo_id int ,
+  vessel_id int ,
+  place_of_origin varchar(250) ,
+  destination varchar(250) ,
+  estimated_time_of_arrival datetime ,
+  estimated_time_of_departure datetime ,
+  foreign key cargo_id references cargoes(id),
+   foreign key vessel_id references vessels(id)
+);
+
+
+
+insert into shipments values
+(null, 14, 8, 'colmbo', 'USA', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 13, 1, 'Albania', 'Denmark', '2025-07-11 12:00:00', '2025-07-15 14:00:00'),
+(null, 8, 4, 'Italy', 'Gabon', '2024-12-21 01:10:00', '2025-02-01 14:50:00'),
+(null, 7, 3, 'Jamaica', 'Indonessia', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 10, 2, 'Kenya', 'USA', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 11, 6, 'India', 'USA', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 14, 4, 'colmbo', 'Bangladesh', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 1, 8, 'China', 'Bangladesh', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 1, 1, 'Vietnam', 'Bangladesh', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 4, 8, 'Brazil', 'Bangladesh', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 5, 1, 'Russia', 'USA', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 2, 8, 'Zambia', 'Uruguya', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 11, 5, 'Jamaica', 'USA', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 9, 2, 'USA', 'India', '2025-08-21 12:00:00', '2025-08-31 14:00:00'),
+(null, 7, 6, 'USA', 'India', '2025-08-21 12:00:00', '2025-08-31 14:00:00');
+
+
+
+create table transport_companies (
+  id int primary key not null auto_increment,
+  name varchar(250) ,
+  contact varchar(20),
+);
+
+
+
+insert into transport_companies values
+(null, 'atlantic shipping comapny', '234-98776655'),
+(null, 'Global Freight Ltd.', '+49-30-1234-5678'),
+(null, 'TransMar Logistics', '+1-202-555-0145'),
+(null, 'Oceanic Transport Co.', '+44-20-7946-0958'),
+(null, 'RapidMovers Inc.', '234-9987005'),
+(null, 'Continental Transport', '234-6501923'),
+(null, 'Horizon Shipping Ltd.', '+61-2-9876-5432'),
+(null, 'Pacific Cargo Services', '1-310-555-0198');
+
+
+DROP TABLE  vessels ;
+create table  vessels (
+  id int primary key not null  auto_increment,
+  name varchar(250) ,
+  type enum('Containers','Oil tanker','chemical tanker','chemical tanker','LPG Carrier','Pilot Boat','General Cargo ship'),
+  capacity varchar(250) ,
+    flag_state varchar(250) ,
+  owner_id int ,
+  foreign key ( owner_id ) references owners(owner_id)
+) ;
+
+insert into vessels values 
+(null, 'Maersk Alabama', 'Containers', '1700 TEU', 'Panama', 22),
+(null, 'Front Altair', 'LPG Carrier', '8000 Cars', 'Sweden', 1),
+(null, 'Symphony Apirit', 'Oil tanker', '17980 TEU', 'USA', 19),
+(null, ' MSC virr', 'chemical tanker', ' 110000 DWT', 'India', 17),
+(null, 'Artic Atlantica', 'Pilot Boat', ' 6334 Pax', 'Singapore', 12),
+(null, 'AkC Dream', 'LPG Carrier', '120000 TEU', 'Panama', 7),
+(null, 'Discovery Infinity', 'Containers', '67232 Pax', 'Norway', 22),
+(null, 'Liberty Sun', 'General Cargo ship', '3451222 TEU', 'UK', 2);
